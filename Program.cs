@@ -7,7 +7,6 @@ namespace DataIngestion.TestAssignment
 	{
 		static Settings _settings;
 
-		static Domain.FileIO.IGoogleDrive _googleDrive;
 		static List<Domain.Entities.Artist> _artists;
 		static List<Domain.Entities.ArtistCollection> _artistCollections;
 		static List<Domain.Entities.CollectionMatch> _collectionMatches;
@@ -15,17 +14,23 @@ namespace DataIngestion.TestAssignment
 
 		static void Download()
         {
-			Console.WriteLine("1- Download from Google.Drive");
-			_googleDrive = new Infrastructure.FileIO.GoogleDrive(
+			Console.WriteLine("1- Download from Google Drive");
+			Domain.FileIO.IGoogleDrive googleDrive = new Infrastructure.FileIO.GoogleDrive(
 									_settings.GoogleDriveAccessKey,
 									_settings.GoogleDriveBaseUrl);
-			Console.WriteLine("\r --> Get files info");
-			var filesInfo = _googleDrive.GetFilesInfo(_settings.GoogleDriveFolderAddress,
+			Console.WriteLine("\r --> Connecting to Google Drive");
+			var filesInfo = googleDrive.GetFilesInfo(_settings.GoogleDriveFolderAddress,
 								".zip");
-			foreach(var f in filesInfo)
-            {
-				Console.WriteLine("\r\r --> Download " + f.Title);
+
+			Domain.FileIO.IDownloader downloader = new Infrastructure.FileIO.Downloader();
+			foreach (var f in filesInfo)
+			{
+				var destionationFileAddress = _settings.DownloadFolder + f.Title;
+				downloader.Download(f.DownloadUrl ?? f.AlternateLink,
+										destionationFileAddress);
 			}
+			
+			downloader.Dispose();
 		}
 
 		static void Unzip()
