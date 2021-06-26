@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="DataIngestion.TestAssignment.Domain\DataIngestion.TestAssignment.Domain.csproj" />
+    <ProjectReference Include="DataIngestion.TestAssignment.Infrastructure\DataIngestion.TestAssignment.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
