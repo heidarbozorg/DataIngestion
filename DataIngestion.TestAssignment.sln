@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E909D4C9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataIngestion.TestAssignment", "DataIngestion.TestAssignment.csproj", "{81756303-2272-459E-A893-5EF6772282F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataIngestion.TestAssignment.Domain", "DataIngestion.TestAssignment.Domain\DataIngestion.TestAssignment.Domain.csproj", "{9CFE7B34-D092-4BC1-BDDF-68FB25217E3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,12 +21,17 @@ Global
 		{81756303-2272-459E-A893-5EF6772282F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81756303-2272-459E-A893-5EF6772282F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81756303-2272-459E-A893-5EF6772282F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CFE7B34-D092-4BC1-BDDF-68FB25217E3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CFE7B34-D092-4BC1-BDDF-68FB25217E3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CFE7B34-D092-4BC1-BDDF-68FB25217E3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CFE7B34-D092-4BC1-BDDF-68FB25217E3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{81756303-2272-459E-A893-5EF6772282F0} = {A5FE032C-A195-4AD4-A8D6-4FAF1A50E3A3}
+		{9CFE7B34-D092-4BC1-BDDF-68FB25217E3C} = {A5FE032C-A195-4AD4-A8D6-4FAF1A50E3A3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5416B5EF-27BA-4E96-B8FA-4B0110910737}
