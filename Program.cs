@@ -6,17 +6,32 @@ namespace DataIngestion.TestAssignment
 	class Program
 	{
 		static string _rootAddress = Environment.CurrentDirectory + "\\";
+		static Settings _settings = new Settings(_rootAddress);
 
+		static Domain.FileIO.IGoogleDrive _googleDrive;
 		static List<Domain.Entities.Artist> _artists;
 		static List<Domain.Entities.ArtistCollection> _artistCollections;
 		static List<Domain.Entities.CollectionMatch> _collectionMatches;
 		static List<Domain.Entities.Collection> _collections;
 
+		static void Download()
+        {
+			Console.WriteLine("1- Download from Google.Drive");
+			_googleDrive = new Infrastructure.FileIO.GoogleDrive(
+									_settings.GoogleDriveAccessKey,
+									_settings.GoogleDriveBaseUrl);
+			Console.WriteLine("\r --> Get files info");
+			var filesInfo = _googleDrive.GetFilesInfo(_settings.GoogleDriveFolderAddress,
+								".zip");
+			foreach(var f in filesInfo)
+            {
+				Console.WriteLine("\r\r --> Download " + f.Title);
+			}
+		}
+
 		static void Unzip()
         {
 			Console.WriteLine("2- Unzip files");
-			var unzipFolder = _rootAddress + "Unzip\\";
-			var downloadFolder = _rootAddress + "Downloads\\";
 			var zipFiles = new string[] 
 			{ 
 				"artist.zip", 
@@ -28,8 +43,9 @@ namespace DataIngestion.TestAssignment
 			foreach (var z in zipFiles)
 			{
 				Console.WriteLine("\r --> Unzip " + z);
-				System.IO.Compression.ZipFile.ExtractToDirectory(downloadFolder + z,
-							unzipFolder, true);
+				System.IO.Compression.ZipFile.ExtractToDirectory(
+							_settings.DownloadFolder + z,
+							_settings.UnzipFolder, true);
 			}
 		}
 
@@ -37,23 +53,22 @@ namespace DataIngestion.TestAssignment
         {
             Console.WriteLine("3- Read unzip files");
             Console.WriteLine("\r --> Read artist file.");
-			_artists = new Infrastructure.FileIO.ArtistRepository(_rootAddress + "Unzip\\artist").GetAll();
+			_artists = new Infrastructure.FileIO.ArtistRepository(_settings.UnzipFolder + "artist").GetAll();
 
 			Console.WriteLine("\r --> Read artist_collection file.");
-			_artistCollections = new Infrastructure.FileIO.ArtistCollectionRepository(_rootAddress + "Unzip\\artist_collection").GetAll();
+			_artistCollections = new Infrastructure.FileIO.ArtistCollectionRepository(_settings.UnzipFolder + "artist_collection").GetAll();
 
 			Console.WriteLine("\r --> Read collection_match file.");
-			_collectionMatches = new Infrastructure.FileIO.CollectionMatchRepository(_rootAddress + "Unzip\\collection_match").GetAll();
+			_collectionMatches = new Infrastructure.FileIO.CollectionMatchRepository(_settings.UnzipFolder + "collection_match").GetAll();
 
 			Console.WriteLine("\r --> Read collection file.");
-			_collections = new Infrastructure.FileIO.CollectionRepository(_rootAddress + "Unzip\\collection").GetAll();
+			_collections = new Infrastructure.FileIO.CollectionRepository(_settings.UnzipFolder + "collection").GetAll();
         }
 
 		static void InsertIntoElasticSearch()
         {
-			Console.WriteLine("4- Insert into ElasticSearch.");
-			var settings = new Settings();
-			using (var unitOfWork = new Infrastructure.UnitOfWork(settings.ElasticSearchUrl))
+			Console.WriteLine("4- Insert into ElasticSearch.");			
+			using (var unitOfWork = new Infrastructure.UnitOfWork(_settings.ElasticSearchUrl))
 			{
 				Console.WriteLine("\r --> Create ElasticSearch DataSource.");
 				var collections = unitOfWork.Collections.GetCollection(
@@ -69,12 +84,10 @@ namespace DataIngestion.TestAssignment
 
 		static void Main(string[] args)
 		{
-			// Todo: 
-			// 1- Download from goodle drive
-
-			Unzip();
-			ReadFiles();
-			InsertIntoElasticSearch();
+			Download();
+			//Unzip();
+			//ReadFiles();
+			//InsertIntoElasticSearch();
 
 			Console.WriteLine("\nDone!");
 		}
