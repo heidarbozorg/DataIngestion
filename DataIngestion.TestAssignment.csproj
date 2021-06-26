@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Downloads\" />
+    <Folder Include="Unzip\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,16 +41,16 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Unzip\artist">
+    <None Update="Downloads\artist.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Unzip\artist_collection">
+    <None Update="Downloads\artist_collection.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Unzip\collection">
+    <None Update="Downloads\collection.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Unzip\collection_match">
+    <None Update="Downloads\collection_match.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
