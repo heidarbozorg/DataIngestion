@@ -5,14 +5,14 @@ namespace DataIngestion.TestAssignment
 {
 	class Program
 	{
-		static Domain.Repositories.ICsvFiles<Domain.Entities.Artist> _artistCsvFile;
 		static List<Domain.Entities.Artist> _artists;
+		static List<Domain.Entities.ArtistCollection> _artistCollections;
 
 		static void ReadFiles()
         {
 			var rootAddress = Environment.CurrentDirectory + "\\";
-			_artistCsvFile = new Infrastructure.FileIO.Artist(rootAddress + "Unzip\\artist");
-			_artists = _artistCsvFile.GetAll();
+			_artists = new Infrastructure.FileIO.ArtistRepository(rootAddress + "Unzip\\artist").GetAll();
+			_artistCollections = new Infrastructure.FileIO.ArtistCollectionRepository(rootAddress + "Unzip\\artist_collection").GetAll();
         }
 
 		static void Main(string[] args)
