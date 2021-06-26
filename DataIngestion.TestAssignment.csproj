@@ -19,7 +19,21 @@
 
   <ItemGroup>
     <Folder Include="Downloads\" />
-    <Folder Include="Unzip\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Unzip\artist">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Unzip\artist_collection">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Unzip\collection">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Unzip\collection_match">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

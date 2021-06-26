@@ -298,3 +298,7 @@ pkg/
 /.sonarqube
 **/coverage.xml
 **/coverage.opencover.xml
+Unzip/artist
+Unzip/artist_collection
+Unzip/collection
+Unzip/collection_match
