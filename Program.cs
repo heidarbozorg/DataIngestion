@@ -8,7 +8,7 @@ namespace DataIngestion.TestAssignment
 		static List<Domain.Entities.Artist> _artists;
 		static List<Domain.Entities.ArtistCollection> _artistCollections;
 		static List<Domain.Entities.CollectionMatch> _collectionMatches;
-		static List<Domain.Entities.Collection> _collections;
+		static List<Domain.Entities.Collection> _collections;		
 
 		static void ReadFiles()
         {
@@ -30,8 +30,8 @@ namespace DataIngestion.TestAssignment
 		static void InsertIntoElasticSearch()
         {
 			Console.WriteLine("4- Insert into ElasticSearch.");
-			var elasticUrl = "http://localhost:9200";
-			using (var unitOfWork = new Infrastructure.UnitOfWork(elasticUrl))
+			var settings = new Settings();
+			using (var unitOfWork = new Infrastructure.UnitOfWork(settings.ElasticSearchUrl))
 			{
 				Console.WriteLine("\r --> Create ElasticSearch DataSource.");
 				var collections = unitOfWork.Collections.GetCollection(
