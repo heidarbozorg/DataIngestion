@@ -10,7 +10,6 @@ namespace DataIngestion.TestAssignment
 		static List<Domain.Entities.ArtistCollection> _artistCollections;
 		static List<Domain.Entities.CollectionMatch> _collectionMatches;
 		static List<Domain.Entities.Collection> _collections;
-		static List<Domain.Entities.NoSQL.Collection> _noSQLcollections;
 
 		static void ReadFiles()
         {
@@ -29,35 +28,23 @@ namespace DataIngestion.TestAssignment
 			_collections = new Infrastructure.FileIO.CollectionRepository(rootAddress + "Unzip\\collection").GetAll();
         }
 
-		static void CreateElasticSearchDataSource()
-        {
-			Console.WriteLine("\r --> Create ElasticSearch DataSource.");
-			var a = new Domain.Entities.NoSQL.Artist(935585671, "Anmol Dhaliwal");
-			var artists = new List<Domain.Entities.NoSQL.Artist>();
-			artists.Add(a);
-			
-			var c = new Domain.Entities.NoSQL.Collection()
-			{
-				id = 1255407551,
-				name = "Nishana - Single",
-				url = "http://ms.com/album/nishana-single/1255407551?uo=5",
-				upc = "191061793557", // found in CollectionMatch file
-				releaseDate = Convert.ToDateTime("2017-06-10T00:00:00"),
-				isCompilation = false,
-				label = "Aark Records",
-				imageUrl = "http://img.com/image/thumb/Music117/v4/92/b8/51/92b85100-13c8-8fa4-0856-bb27276fdf87/191061793557.jpg/170x170bb.jpg",
-				artists = artists
-			};
-
-			_noSQLcollections = new List<Domain.Entities.NoSQL.Collection>();
-			_noSQLcollections.Add(c);
-		}
-
 		static void InsertIntoElasticSearch()
         {
 			Console.WriteLine("4- Insert into ElasticSearch.");
-			CreateElasticSearchDataSource();
-			Console.WriteLine("\r --> Insert {0} records ...", _noSQLcollections.Count);
+			var elasticUrl = "http://localhost:9200";
+			using (var unitOfWork = new Infrastructure.UnitOfWork(elasticUrl))
+			{
+				Console.WriteLine("\r --> Create ElasticSearch DataSource.");
+				var collections = unitOfWork.Collections.GetCollection(
+									_artists,
+									_artistCollections,
+									_collections,
+									_collectionMatches
+									);
+
+				Console.WriteLine("\r --> Insert {0} records ...", collections.Count());
+				unitOfWork.Collections.AddRange(collections);
+			}
 		}
 
 		static void Main(string[] args)

@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NEST" Version="7.13.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DataIngestion.TestAssignment.Domain\DataIngestion.TestAssignment.Domain.csproj" />
   </ItemGroup>
 
