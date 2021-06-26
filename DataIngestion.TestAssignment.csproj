@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="DataIngestion.TestAssignment.Domain\DataIngestion.TestAssignment.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Unzip\artist">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
