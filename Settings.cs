@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 
 namespace DataIngestion.TestAssignment
 {
@@ -26,15 +27,23 @@ namespace DataIngestion.TestAssignment
         }
         
 
-        public Settings(string baseAddress)
+        public Settings()
         {
-            _baseAddress = baseAddress;
+            _baseAddress = Environment.CurrentDirectory + "\\";
 
-            var builder = new ConfigurationBuilder().AddJsonFile($"appsettings.json", true, true);
+            var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            var builder = new ConfigurationBuilder()
+                    .AddJsonFile($"appsettings.json", true, true)
+                    .AddJsonFile($"appsettings.{environmentName}.json", true, true);
+
             _config = builder.Build();
 
             GoogleDriveBaseUrl = _config["GoogleDriveBaseUrl"];
             GoogleDriveAccessKey = _config["GoogleDriveAccessKey"];
+            if (string.IsNullOrEmpty(GoogleDriveAccessKey))
+                throw new ArgumentNullException("Plaease set ASPNETCORE_ENVIRONMENT value, then set GoogleDriveAccessKey tag in the appsettings.ASPNETCORE_ENVIRONMENT.json");
+
             GoogleDriveFolderAddress = _config["GoogleDriveFolderAddress"];
 
             DownloadFolder = GetFolder("DownloadFolder") + "\\";

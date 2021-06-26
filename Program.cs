@@ -5,8 +5,7 @@ namespace DataIngestion.TestAssignment
 {
 	class Program
 	{
-		static string _rootAddress = Environment.CurrentDirectory + "\\";
-		static Settings _settings = new Settings(_rootAddress);
+		static Settings _settings;
 
 		static Domain.FileIO.IGoogleDrive _googleDrive;
 		static List<Domain.Entities.Artist> _artists;
@@ -84,10 +83,12 @@ namespace DataIngestion.TestAssignment
 
 		static void Main(string[] args)
 		{
+			_settings = new Settings();
+
 			Download();
-			//Unzip();
-			//ReadFiles();
-			//InsertIntoElasticSearch();
+			Unzip();
+			ReadFiles();
+			InsertIntoElasticSearch();
 
 			Console.WriteLine("\nDone!");
 		}
