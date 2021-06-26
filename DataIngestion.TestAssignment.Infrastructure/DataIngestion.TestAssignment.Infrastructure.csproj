@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataIngestion.TestAssignment.Domain\DataIngestion.TestAssignment.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
