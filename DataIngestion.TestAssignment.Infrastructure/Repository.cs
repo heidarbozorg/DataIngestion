@@ -1,6 +1,7 @@
 ﻿using Nest;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DataIngestion.TestAssignment.Infrastructure
 {
@@ -8,6 +9,7 @@ namespace DataIngestion.TestAssignment.Infrastructure
         Domain.Repositories.IRepository<TEntity> where TEntity : class
     {
         private const int _pageSize = 512;
+        private const int _timeout = 15;
 
         private readonly ElasticClient _client;        
 
@@ -18,6 +20,9 @@ namespace DataIngestion.TestAssignment.Infrastructure
 
         public void AddRange(IEnumerable<TEntity> entities)
         {
+            long n = entities.Count();
+            long sentRecords = 0;
+
             _client.BulkAll(entities, e => e
                 .BackOffTime("30s")
                 .BackOffRetries(2)
@@ -25,8 +30,11 @@ namespace DataIngestion.TestAssignment.Infrastructure
                 .MaxDegreeOfParallelism(Environment.ProcessorCount)
                 .Size(_pageSize)
             )
-            .Wait(TimeSpan.FromMinutes(15), next =>
+            .Wait(TimeSpan.FromMinutes(_timeout), next =>
             {
+                sentRecords += next.Items.Count;
+                Console.Write("\r --> Insert into ElasticSearch: {0}/{1} Records -- %{2}",
+                        sentRecords, n, (sentRecords * 100 / n));
             });
         }
     }

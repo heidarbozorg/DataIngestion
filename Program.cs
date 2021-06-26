@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DataIngestion.TestAssignment
 {
@@ -42,7 +41,6 @@ namespace DataIngestion.TestAssignment
 									_collectionMatches
 									);
 
-				Console.WriteLine("\r --> Insert {0} records ...", collections.Count());
 				unitOfWork.Collections.AddRange(collections);
 			}
 		}
@@ -52,12 +50,11 @@ namespace DataIngestion.TestAssignment
 			// Todo: 
 			// 1- Download from goodle drive
 			// 2- Unzip files
-			// 4- Insert into ElasticSearch
 
 			ReadFiles();
 			InsertIntoElasticSearch();
 
-			Console.WriteLine("Done!");
+			Console.WriteLine("\nDone!");
 		}
 	}
 }
