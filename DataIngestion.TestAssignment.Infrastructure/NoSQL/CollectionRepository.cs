@@ -1,6 +1,7 @@
 ﻿using Nest;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DataIngestion.TestAssignment.Infrastructure.NoSQL
 {
@@ -20,26 +21,22 @@ namespace DataIngestion.TestAssignment.Infrastructure.NoSQL
             IEnumerable<Domain.Entities.CollectionMatch> collectionMatches
         )
         {
-			var a = new Domain.Entities.NoSQL.Artist(935585671, "Anmol Dhaliwal");
-			var arts = new List<Domain.Entities.NoSQL.Artist>();
-			arts.Add(a);
+            var artistJoinCollection =
+                        (from ac in artistCollections
+                         join a in artists on ac.ArtistId equals a.ArtistId into g
+                         select new
+                         {
+                             ac.CollectionId,
+                             artists = g.Select(a => new Domain.Entities.NoSQL.Artist(a.ArtistId, a.Name)).ToList()
+                         }).ToList();
 
-			var c = new Domain.Entities.NoSQL.Collection()
-			{
-				id = 1255407551,
-				name = "Nishana - Single",
-				url = "http://ms.com/album/nishana-single/1255407551?uo=5",
-				upc = "191061793557", // found in CollectionMatch file
-				releaseDate = Convert.ToDateTime("2017-06-10T00:00:00"),
-				isCompilation = false,
-				label = "Aark Records",
-				imageUrl = "http://img.com/image/thumb/Music117/v4/92/b8/51/92b85100-13c8-8fa4-0856-bb27276fdf87/191061793557.jpg/170x170bb.jpg",
-				artists = arts
-			};
+            var q = (from c in collections
+                     join ac in artistJoinCollection on c.CollectionId equals ac.CollectionId
+                     join cm in collectionMatches on ac.CollectionId equals cm.CollectionId
+                     select new Domain.Entities.NoSQL.Collection(c, cm, ac.artists)
+                     ).ToList();
 
-			var rst = new List<Domain.Entities.NoSQL.Collection>();
-			rst.Add(c);
-			return rst;
-		}
+            return q;
+        }
 	}
 }

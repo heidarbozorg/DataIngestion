@@ -14,5 +14,23 @@ namespace DataIngestion.TestAssignment.Domain.Entities.NoSQL
         public string label { get; set; }
         public string imageUrl { get; set; }
         public ICollection<Artist> artists { get; set; }
+
+        public Collection(
+            Entities.Collection collection,
+            Entities.CollectionMatch collectionMatch,
+            List<Artist> artists
+            )
+        {
+            id = collection.CollectionId;
+            name = collection.Name;
+            url = collection.ViewUrl;
+            releaseDate = collection.OriginalReleaseDate;
+            isCompilation = collection.IsCompilation;
+            label = collection.LabelStudio;
+            imageUrl = collection.ArtworkUrl;
+
+            upc = collectionMatch.Upc;
+            this.artists = artists;
+        }
     }
 }
