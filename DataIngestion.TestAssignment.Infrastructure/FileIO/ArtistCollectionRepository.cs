@@ -8,7 +8,7 @@
 
         protected override Domain.Entities.ArtistCollection Parse(string[] splitedStr)
         {
-            if (splitedStr == null || splitedStr.Length != 6)
+            if (splitedStr == null || splitedStr.Length != 5)
                 return null;
 
             var rst = new Domain.Entities.ArtistCollection()
