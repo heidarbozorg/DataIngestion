@@ -11,12 +11,15 @@
 
   <ItemGroup>
     <Compile Remove="DataIngestion.TestAssignment.Domain\**" />
+    <Compile Remove="DataIngestion.TestAssignment.Infrastructure.UnitTests\**" />
     <Compile Remove="DataIngestion.TestAssignment.Infrastructure\**" />
     <Compile Remove="Data\**" />
     <EmbeddedResource Remove="DataIngestion.TestAssignment.Domain\**" />
+    <EmbeddedResource Remove="DataIngestion.TestAssignment.Infrastructure.UnitTests\**" />
     <EmbeddedResource Remove="DataIngestion.TestAssignment.Infrastructure\**" />
     <EmbeddedResource Remove="Data\**" />
     <None Remove="DataIngestion.TestAssignment.Domain\**" />
+    <None Remove="DataIngestion.TestAssignment.Infrastructure.UnitTests\**" />
     <None Remove="DataIngestion.TestAssignment.Infrastructure\**" />
     <None Remove="Data\**" />
   </ItemGroup>
