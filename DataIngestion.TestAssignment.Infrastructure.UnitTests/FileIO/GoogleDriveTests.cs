@@ -9,28 +9,16 @@ namespace DataIngestion.TestAssignment.Infrastructure.UnitTests.FileIO
     class GoogleDriveTests
     {
         private const string _accessKey = "Google Drive API key";
-        private Infrastructure.FileIO.GoogleDrive _googleDrive;
-        private Mock<Domain.FileIO.IDownloader> _downloader;
-        private Mock<RestSharp.IRestClient> _restClient;
         private const string _downloadFolder = "Download";
         private const string _googleDriveAPIBaseUrl = "www.googleapis.com";
+        private Mock<Domain.FileIO.IDownloader> _downloader;
+        private Mock<RestSharp.IRestClient> _restClient;
+        private Infrastructure.FileIO.GoogleDrive _googleDrive;
         private Infrastructure.FileIO.GoogleDriveList _googleDriveList;
         private List<Domain.FileIO.GoogleDriveItem> _googleDriveItems;
 
-
-        [SetUp]
-        public void Setup()
+        private void SetupMockData()
         {
-            _downloader = new Mock<Domain.FileIO.IDownloader>();
-            _restClient = new Mock<RestSharp.IRestClient>();
-
-            _googleDrive = new Infrastructure.FileIO.GoogleDrive(
-                                    _accessKey,
-                                    _downloader.Object,
-                                    _downloadFolder,                                    
-                                    _googleDriveAPIBaseUrl,
-                                    _restClient.Object);
-
             _googleDriveItems = new List<Domain.FileIO.GoogleDriveItem>();
             _googleDriveItems.Add(new Domain.FileIO.GoogleDriveItem() { Title = "file1.zip", DownloadUrl = "www.google.com" });
             _googleDriveItems.Add(new Domain.FileIO.GoogleDriveItem() { Title = "file2", DownloadUrl = "www.google.com" });
@@ -49,6 +37,22 @@ namespace DataIngestion.TestAssignment.Infrastructure.UnitTests.FileIO
                     StatusCode = System.Net.HttpStatusCode.OK,
                     Data = _googleDriveList
                 });
+        }
+
+        [SetUp]
+        public void Setup()
+        {
+            _downloader = new Mock<Domain.FileIO.IDownloader>();
+            _restClient = new Mock<RestSharp.IRestClient>();
+
+            _googleDrive = new Infrastructure.FileIO.GoogleDrive(
+                                    _accessKey,
+                                    _downloader.Object,
+                                    _downloadFolder,                                    
+                                    _googleDriveAPIBaseUrl,
+                                    _restClient.Object);
+
+            SetupMockData();
         }
 
         #region GetListOfFiles
