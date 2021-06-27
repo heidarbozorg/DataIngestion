@@ -1,8 +1,8 @@
 ﻿namespace DataIngestion.TestAssignment.Infrastructure.FileIO
 {
-    public class ArtistRepository : CsvFileRepository<Domain.Entities.Artist>
+    public class Artist : CsvFiles<Domain.Entities.Artist>
     {
-        public ArtistRepository(string fileAddress) : base(fileAddress)
+        public Artist(string fileAddress) : base(fileAddress)
         {
         }
 

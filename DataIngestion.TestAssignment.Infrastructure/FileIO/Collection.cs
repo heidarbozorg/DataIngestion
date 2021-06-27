@@ -2,9 +2,9 @@
 
 namespace DataIngestion.TestAssignment.Infrastructure.FileIO
 {
-    public class CollectionRepository : CsvFileRepository<Domain.Entities.Collection>
+    public class Collection : CsvFiles<Domain.Entities.Collection>
     {
-        public CollectionRepository(string fileAddress) : base(fileAddress)
+        public Collection(string fileAddress) : base(fileAddress)
         {
         }
 

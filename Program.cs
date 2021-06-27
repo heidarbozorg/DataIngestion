@@ -72,16 +72,16 @@ namespace DataIngestion.TestAssignment
         {
             Console.WriteLine("3- Read unzip files");
 
-			_artists = new Infrastructure.FileIO.ArtistRepository(_settings.UnzipFolder + "artist")
+			_artists = new Infrastructure.FileIO.Artist(_settings.UnzipFolder + "artist")
 								.GetAll();
 
-			_artistCollections = new Infrastructure.FileIO.ArtistCollectionRepository(_settings.UnzipFolder + "artist_collection")
+			_artistCollections = new Infrastructure.FileIO.ArtistCollection(_settings.UnzipFolder + "artist_collection")
 								.GetAll();
 
-			_collectionMatches = new Infrastructure.FileIO.CollectionMatchRepository(_settings.UnzipFolder + "collection_match")
+			_collectionMatches = new Infrastructure.FileIO.CollectionMatch(_settings.UnzipFolder + "collection_match")
 								.GetAll();
 
-			_collections = new Infrastructure.FileIO.CollectionRepository(_settings.UnzipFolder + "collection")
+			_collections = new Infrastructure.FileIO.Collection(_settings.UnzipFolder + "collection")
 								.GetAll();
         }
 

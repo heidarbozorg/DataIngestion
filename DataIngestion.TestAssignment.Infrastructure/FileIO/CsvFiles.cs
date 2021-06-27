@@ -4,14 +4,14 @@ using System.IO;
 
 namespace DataIngestion.TestAssignment.Infrastructure.FileIO
 {
-    public abstract class CsvFileRepository<TEntity> : Domain.Repositories.ICsvFiles<TEntity> where TEntity : class
+    public abstract class CsvFiles<TEntity> : Domain.FileIO.ICsvFiles<TEntity> where TEntity : class
     {
         private const string _fieldSeparator = "\u0001";
         private const string _dirtyString = "\u0002";
 
         private readonly string _fileAddress;
 
-        protected CsvFileRepository(string fileAddress)
+        protected CsvFiles(string fileAddress)
         {
             if (!System.IO.File.Exists(fileAddress))
                 throw new FileNotFoundException();

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DataIngestion.TestAssignment.Domain.Repositories
+namespace DataIngestion.TestAssignment.Domain.FileIO
 {
     public interface ICsvFiles<TEntity> where TEntity : class
     {
