@@ -11,15 +11,18 @@ namespace DataIngestion.TestAssignment.Infrastructure
         private const int _pageSize = 512;
         private const int _timeout = 15;
 
-        private readonly ElasticClient _client;        
+        private readonly IElasticClient _client;        
 
-        public Repository(ElasticClient client)
+        public Repository(IElasticClient client)
         {
            _client = client;
         }
 
         public void AddRange(IEnumerable<TEntity> entities)
         {
+            if (entities == null)
+                throw new ArgumentNullException("Invalid entities.");
+
             long n = entities.Count();
             long sentRecords = 0;
 

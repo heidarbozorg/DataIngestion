@@ -9,7 +9,7 @@ namespace DataIngestion.TestAssignment.Infrastructure.NoSQL
         Repository<Domain.Entities.NoSQL.Collection>,
         Domain.Repositories.ICollectionRepository
     {
-        public CollectionRepository(ElasticClient client) : base(client)
+        public CollectionRepository(IElasticClient client) : base(client)
         {
         }
 
