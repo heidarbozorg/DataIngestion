@@ -4,9 +4,9 @@ namespace DataIngestion.TestAssignment.Domain.FileIO
 {
     public interface IGoogleDrive
     {
-        IEnumerable<GoogleDriveItem> GetFilesInfo(string googleDriveFolderAddress,
+        IEnumerable<GoogleDriveItem> GetListOfFiles(string googleDriveFolderAddress,
                         string extensionFilter = null);
 
-        IEnumerable<string> Download(ICollection<GoogleDriveItem> files);
+        IEnumerable<string> Download(IEnumerable<GoogleDriveItem> files);
     }
 }

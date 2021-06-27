@@ -21,11 +21,15 @@ namespace DataIngestion.TestAssignment
         static void Setup()
         {
 			_settings = new Settings();
+			
+			_downloader = new Infrastructure.FileIO.Downloader();
+
 			_googleDrive = new Infrastructure.FileIO.GoogleDrive(
 									_settings.GoogleDriveAccessKey,
-									_settings.GoogleDriveBaseUrl);
+									_settings.GoogleDriveBaseUrl,
+									_downloader,
+									_settings.DownloadFolder);
 
-			_downloader = new Infrastructure.FileIO.Downloader();
 			
 			_unitOfWork = new Infrastructure.UnitOfWork(_settings.ElasticSearchUrl);
 		}
@@ -36,21 +40,15 @@ namespace DataIngestion.TestAssignment
 			_unitOfWork.Dispose();
         }
 
-		static void Download()
+		static void DownloadFromGoogleDrive()
         {
 			Console.WriteLine("1- Download from Google Drive");
 
-			var filesInfo = _googleDrive.GetFilesInfo(_settings.GoogleDriveFolderAddress, "zip");
-
-			foreach (var f in filesInfo)
-			{
-				var destionationFileAddress = _settings.DownloadFolder + f.Title;
-				_downloader.Download(f.DownloadUrl ?? f.AlternateLink,
-										destionationFileAddress);
-			}
+			var filesInfo = _googleDrive.GetListOfFiles(_settings.GoogleDriveFolderAddress, "zip");
+			_googleDrive.Download(filesInfo);			
 		}
 
-		static void Unzip()
+		static void UnzipDownloadedFiles()
         {
 			Console.WriteLine("2- Unzip files");
 			var zipFiles = new string[] 
@@ -70,13 +68,21 @@ namespace DataIngestion.TestAssignment
 			}
 		}
 
-		static void ReadFiles()
+		static void ReadUnzipFiles()
         {
             Console.WriteLine("3- Read unzip files");
-			_artists = new Infrastructure.FileIO.ArtistRepository(_settings.UnzipFolder + "artist").GetAll();
-			_artistCollections = new Infrastructure.FileIO.ArtistCollectionRepository(_settings.UnzipFolder + "artist_collection").GetAll();
-			_collectionMatches = new Infrastructure.FileIO.CollectionMatchRepository(_settings.UnzipFolder + "collection_match").GetAll();
-			_collections = new Infrastructure.FileIO.CollectionRepository(_settings.UnzipFolder + "collection").GetAll();
+
+			_artists = new Infrastructure.FileIO.ArtistRepository(_settings.UnzipFolder + "artist")
+								.GetAll();
+
+			_artistCollections = new Infrastructure.FileIO.ArtistCollectionRepository(_settings.UnzipFolder + "artist_collection")
+								.GetAll();
+
+			_collectionMatches = new Infrastructure.FileIO.CollectionMatchRepository(_settings.UnzipFolder + "collection_match")
+								.GetAll();
+
+			_collections = new Infrastructure.FileIO.CollectionRepository(_settings.UnzipFolder + "collection")
+								.GetAll();
         }
 
 		static void InsertIntoElasticSearch()
@@ -98,9 +104,9 @@ namespace DataIngestion.TestAssignment
 		{
 			Setup();
 
-			Download();
-			Unzip();
-			ReadFiles();
+			DownloadFromGoogleDrive();
+			UnzipDownloadedFiles();
+			ReadUnzipFiles();
 			InsertIntoElasticSearch();
 
 			Finish();

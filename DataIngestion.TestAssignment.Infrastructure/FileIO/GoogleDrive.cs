@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using RestSharp;
@@ -9,16 +8,15 @@ namespace DataIngestion.TestAssignment.Infrastructure.FileIO
 {
     public class GoogleDrive : Domain.FileIO.IGoogleDrive
     {
+        #region private fields
         private readonly string _googleDriveAccessKey;
         private readonly string _googleDriveBaseUrl;
+        private readonly Domain.FileIO.IDownloader _downloader;
+        private readonly string _downloadFolder;
+        private IRestClient _restClient;
+        #endregion
 
-        public GoogleDrive(string googleDriveAccessKey,
-            string googleDriveBaseUrl = "https://www.googleapis.com/drive/v2/files?q=")
-        {
-            _googleDriveAccessKey = googleDriveAccessKey;
-            _googleDriveBaseUrl = googleDriveBaseUrl;
-        }
-
+        #region private methods
         private string GetFolderId(string googleDriveFolderAddress)
         {
             if (string.IsNullOrEmpty(googleDriveFolderAddress))
@@ -38,12 +36,16 @@ namespace DataIngestion.TestAssignment.Infrastructure.FileIO
             ServicePointManager.ServerCertificateValidationCallback +=
                     (sender, certificate, chain, sslPolicyErrors) => true;
 
-            var client = new RestClient(googleDriveApiURL);
+            if (_restClient == null)
+            {
+                _restClient = new RestClient(googleDriveApiURL);
+                _restClient.Timeout = 30000;
+            }
+
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "aplication/json");
-            client.Timeout = 30000;
 
-            var response = client.Execute<GoogleDriveList>(request);
+            var response = _restClient.Execute<GoogleDriveList>(request);
             return response;
         }
 
@@ -57,13 +59,38 @@ namespace DataIngestion.TestAssignment.Infrastructure.FileIO
 
             return null;
         }
+        #endregion
 
-        public IEnumerable<string> Download(ICollection<Domain.FileIO.GoogleDriveItem> files)
+        public GoogleDrive(
+                        string googleDriveAccessKey,
+                        string googleDriveBaseUrl,
+                        Domain.FileIO.IDownloader downloader,
+                        string downloadFolder,
+                        IRestClient restClient = null)
         {
-            throw new NotImplementedException();
+            _googleDriveAccessKey = googleDriveAccessKey;
+            _googleDriveBaseUrl = googleDriveBaseUrl;
+            _downloader = downloader;
+            _downloadFolder = downloadFolder;
+            _restClient = restClient;
         }
 
-        public IEnumerable<Domain.FileIO.GoogleDriveItem> GetFilesInfo(
+        public IEnumerable<string> Download(IEnumerable<Domain.FileIO.GoogleDriveItem> files)
+        {
+            var rst = new List<string>();
+            foreach (var f in files)
+            {
+                var destionationFileAddress = _downloadFolder + f.Title;
+                _downloader.Download(f.DownloadUrl ?? f.AlternateLink,
+                                        destionationFileAddress);
+
+                rst.Add(destionationFileAddress);
+            }
+
+            return rst;
+        }
+
+        public IEnumerable<Domain.FileIO.GoogleDriveItem> GetListOfFiles(
             string googleDriveFolderAddress, 
             string extensionFilter = null)
         {
