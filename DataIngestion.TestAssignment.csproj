@@ -14,14 +14,17 @@
     <Compile Remove="DataIngestion.TestAssignment.Infrastructure.UnitTests\**" />
     <Compile Remove="DataIngestion.TestAssignment.Infrastructure\**" />
     <Compile Remove="Data\**" />
+    <Compile Remove="Downloads\**" />
     <EmbeddedResource Remove="DataIngestion.TestAssignment.Domain\**" />
     <EmbeddedResource Remove="DataIngestion.TestAssignment.Infrastructure.UnitTests\**" />
     <EmbeddedResource Remove="DataIngestion.TestAssignment.Infrastructure\**" />
     <EmbeddedResource Remove="Data\**" />
+    <EmbeddedResource Remove="Downloads\**" />
     <None Remove="DataIngestion.TestAssignment.Domain\**" />
     <None Remove="DataIngestion.TestAssignment.Infrastructure.UnitTests\**" />
     <None Remove="DataIngestion.TestAssignment.Infrastructure\**" />
     <None Remove="Data\**" />
+    <None Remove="Downloads\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,18 +48,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="appsettings.Product.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Downloads\artist.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Downloads\artist_collection.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Downloads\collection.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Downloads\collection_match.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
