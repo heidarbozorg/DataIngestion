@@ -21,6 +21,8 @@ namespace DataIngestion.TestAssignment.Infrastructure.FileIO
 
         public List<TEntity> GetAll()
         {
+            var fileName = Path.GetFileName(_fileAddress);
+            Console.WriteLine("\r --> Read {0} file.", fileName);
             var rst = new List<TEntity>();
 
             using (var reader = new StreamReader(File.OpenRead(_fileAddress)))

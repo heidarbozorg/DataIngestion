@@ -3,34 +3,51 @@ using System.Collections.Generic;
 
 namespace DataIngestion.TestAssignment
 {
-	class Program
+    class Program
 	{
-		static Settings _settings;
+        #region Variables
+        static Settings _settings;
+		static Domain.FileIO.IGoogleDrive _googleDrive;
+		static Domain.FileIO.IDownloader _downloader;
+		static Domain.Repositories.IUnitOfWork _unitOfWork;
 
 		static List<Domain.Entities.Artist> _artists;
 		static List<Domain.Entities.ArtistCollection> _artistCollections;
 		static List<Domain.Entities.CollectionMatch> _collectionMatches;
 		static List<Domain.Entities.Collection> _collections;
+        #endregion
+
+        #region Methods
+        static void Setup()
+        {
+			_settings = new Settings();
+			_googleDrive = new Infrastructure.FileIO.GoogleDrive(
+									_settings.GoogleDriveAccessKey,
+									_settings.GoogleDriveBaseUrl);
+
+			_downloader = new Infrastructure.FileIO.Downloader();
+			
+			_unitOfWork = new Infrastructure.UnitOfWork(_settings.ElasticSearchUrl);
+		}
+
+		static void Finish()
+        {
+			_downloader.Dispose();
+			_unitOfWork.Dispose();
+        }
 
 		static void Download()
         {
 			Console.WriteLine("1- Download from Google Drive");
-			Domain.FileIO.IGoogleDrive googleDrive = new Infrastructure.FileIO.GoogleDrive(
-									_settings.GoogleDriveAccessKey,
-									_settings.GoogleDriveBaseUrl);
-			Console.WriteLine("\r --> Connecting to Google Drive");
-			var filesInfo = googleDrive.GetFilesInfo(_settings.GoogleDriveFolderAddress,
-								".zip");
 
-			Domain.FileIO.IDownloader downloader = new Infrastructure.FileIO.Downloader();
+			var filesInfo = _googleDrive.GetFilesInfo(_settings.GoogleDriveFolderAddress, "zip");
+
 			foreach (var f in filesInfo)
 			{
 				var destionationFileAddress = _settings.DownloadFolder + f.Title;
-				downloader.Download(f.DownloadUrl ?? f.AlternateLink,
+				_downloader.Download(f.DownloadUrl ?? f.AlternateLink,
 										destionationFileAddress);
 			}
-			
-			downloader.Dispose();
 		}
 
 		static void Unzip()
@@ -56,44 +73,37 @@ namespace DataIngestion.TestAssignment
 		static void ReadFiles()
         {
             Console.WriteLine("3- Read unzip files");
-            Console.WriteLine("\r --> Read artist file.");
 			_artists = new Infrastructure.FileIO.ArtistRepository(_settings.UnzipFolder + "artist").GetAll();
-
-			Console.WriteLine("\r --> Read artist_collection file.");
 			_artistCollections = new Infrastructure.FileIO.ArtistCollectionRepository(_settings.UnzipFolder + "artist_collection").GetAll();
-
-			Console.WriteLine("\r --> Read collection_match file.");
 			_collectionMatches = new Infrastructure.FileIO.CollectionMatchRepository(_settings.UnzipFolder + "collection_match").GetAll();
-
-			Console.WriteLine("\r --> Read collection file.");
 			_collections = new Infrastructure.FileIO.CollectionRepository(_settings.UnzipFolder + "collection").GetAll();
         }
 
 		static void InsertIntoElasticSearch()
         {
 			Console.WriteLine("4- Insert into ElasticSearch.");			
-			using (var unitOfWork = new Infrastructure.UnitOfWork(_settings.ElasticSearchUrl))
-			{
-				Console.WriteLine("\r --> Create ElasticSearch DataSource.");
-				var collections = unitOfWork.Collections.GetCollection(
-									_artists,
-									_artistCollections,
-									_collections,
-									_collectionMatches
-									);
+			Console.WriteLine("\r --> Create ElasticSearch DataSource.");
+			var collections = _unitOfWork.Collections.GetCollection(
+								_artists,
+								_artistCollections,
+								_collections,
+								_collectionMatches
+								);
 
-				unitOfWork.Collections.AddRange(collections);
-			}
+			_unitOfWork.Collections.AddRange(collections);
 		}
+        #endregion
 
-		static void Main(string[] args)
+        static void Main(string[] args)
 		{
-			_settings = new Settings();
+			Setup();
 
 			Download();
 			Unzip();
 			ReadFiles();
 			InsertIntoElasticSearch();
+
+			Finish();
 
 			Console.WriteLine("\nDone!");
 		}
