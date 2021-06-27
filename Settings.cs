@@ -8,7 +8,7 @@ namespace DataIngestion.TestAssignment
         private readonly string _baseAddress;
         private readonly IConfigurationRoot _config;
 
-        public string GoogleDriveBaseUrl { get; }
+        public string GoogleDriveAPIBaseUrl { get; }
         public string GoogleDriveAccessKey { get; }
         public string GoogleDriveFolderAddress { get; }
 
@@ -39,7 +39,7 @@ namespace DataIngestion.TestAssignment
 
             _config = builder.Build();
 
-            GoogleDriveBaseUrl = _config["GoogleDriveBaseUrl"];
+            GoogleDriveAPIBaseUrl = _config["GoogleDriveAPIBaseUrl"];
             GoogleDriveAccessKey = _config["GoogleDriveAccessKey"];
             if (string.IsNullOrEmpty(GoogleDriveAccessKey))
                 throw new ArgumentNullException("Plaease set ASPNETCORE_ENVIRONMENT value, then set GoogleDriveAccessKey tag in the appsettings.ASPNETCORE_ENVIRONMENT.json");

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using RestSharp;
@@ -10,7 +11,7 @@ namespace DataIngestion.TestAssignment.Infrastructure.FileIO
     {
         #region private fields
         private readonly string _googleDriveAccessKey;
-        private readonly string _googleDriveBaseUrl;
+        private readonly string _googleDriveAPIBaseUrl;
         private readonly Domain.FileIO.IDownloader _downloader;
         private readonly string _downloadFolder;
         private IRestClient _restClient;
@@ -31,7 +32,7 @@ namespace DataIngestion.TestAssignment.Infrastructure.FileIO
         private IRestResponse<GoogleDriveList> CallGoogleDriveAPI(string googleDriveFolderAddress)
         {
             var folderId = GetFolderId(googleDriveFolderAddress);
-            var googleDriveApiURL = _googleDriveBaseUrl + folderId + "+in+parents&key=" + _googleDriveAccessKey;
+            var googleDriveApiURL = _googleDriveAPIBaseUrl + folderId + "+in+parents&key=" + _googleDriveAccessKey;
 
             ServicePointManager.ServerCertificateValidationCallback +=
                     (sender, certificate, chain, sslPolicyErrors) => true;
@@ -62,14 +63,14 @@ namespace DataIngestion.TestAssignment.Infrastructure.FileIO
         #endregion
 
         public GoogleDrive(
-                        string googleDriveAccessKey,
-                        string googleDriveBaseUrl,
+                        string googleDriveAccessKey,                        
                         Domain.FileIO.IDownloader downloader,
-                        string downloadFolder,
+                        string downloadFolder,                        
+                        string googleDriveAPIBaseUrl = "https://www.googleapis.com/drive/v2/files?q=",
                         IRestClient restClient = null)
         {
             _googleDriveAccessKey = googleDriveAccessKey;
-            _googleDriveBaseUrl = googleDriveBaseUrl;
+            _googleDriveAPIBaseUrl = googleDriveAPIBaseUrl;
             _downloader = downloader;
             _downloadFolder = downloadFolder;
             _restClient = restClient;
@@ -94,6 +95,9 @@ namespace DataIngestion.TestAssignment.Infrastructure.FileIO
             string googleDriveFolderAddress, 
             string extensionFilter = null)
         {
+            if (string.IsNullOrWhiteSpace(googleDriveFolderAddress))
+                throw new ArgumentNullException("Invalid Google Drive folder address");
+
             var restResponse = CallGoogleDriveAPI(googleDriveFolderAddress);
             var files = ParseRestResponse(restResponse);
             if (files == null)

@@ -26,9 +26,9 @@ namespace DataIngestion.TestAssignment
 
 			_googleDrive = new Infrastructure.FileIO.GoogleDrive(
 									_settings.GoogleDriveAccessKey,
-									_settings.GoogleDriveBaseUrl,
 									_downloader,
-									_settings.DownloadFolder);
+									_settings.DownloadFolder,
+									_settings.GoogleDriveAPIBaseUrl);
 
 			
 			_unitOfWork = new Infrastructure.UnitOfWork(_settings.ElasticSearchUrl);
