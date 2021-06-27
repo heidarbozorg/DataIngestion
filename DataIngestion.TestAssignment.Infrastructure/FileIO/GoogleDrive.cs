@@ -78,6 +78,9 @@ namespace DataIngestion.TestAssignment.Infrastructure.FileIO
 
         public IEnumerable<string> Download(IEnumerable<Domain.FileIO.GoogleDriveItem> files)
         {
+            if (files == null || files.Count() == 0)
+                return null;
+
             var rst = new List<string>();
             foreach (var f in files)
             {

@@ -17,6 +17,7 @@ namespace DataIngestion.TestAssignment.Infrastructure.UnitTests.FileIO
         private Infrastructure.FileIO.GoogleDriveList _googleDriveList;
         private List<Domain.FileIO.GoogleDriveItem> _googleDriveItems;
 
+
         [SetUp]
         public void Setup()
         {
@@ -89,6 +90,45 @@ namespace DataIngestion.TestAssignment.Infrastructure.UnitTests.FileIO
             Assert.That(
                     rst.Count() == 0 || rst.All(f => f.Title.EndsWith(extensionFilter)), 
                     Is.True);
+        }
+        #endregion
+
+        #region Download
+        [Test]
+        public void Download_WhenPassNull_ShouldReturnNull()
+        {
+            var rst = _googleDrive.Download(null);
+            Assert.That(rst, Is.Null);
+        }
+
+        [Test]
+        public void Download_WhenPassEmptyList_ShouldReturnNull()
+        {
+            IEnumerable<Domain.FileIO.GoogleDriveItem> emptyList = new
+                List<Domain.FileIO.GoogleDriveItem>();
+            
+            var rst = _googleDrive.Download(emptyList);
+            Assert.That(rst, Is.Null);
+        }
+
+        [Test]
+        public void Download_WhenPassAList_ShouldCallDownloadMethodForEachFile()
+        {
+            _googleDrive.Download(_googleDriveItems);
+            _downloader.Verify(d => d.Download(It.IsAny<string>(), It.IsAny<string>()),
+                Times.Exactly(_googleDriveItems.Count));
+        }
+
+        [Test]
+        public void Download_WhenPassAList_ShouldReturnAnArrayContainsDestinationFolder()
+        {
+            var rst = _googleDrive.Download(_googleDriveItems).ToList();
+
+            Assert.That(rst.Count, Is.EqualTo(_googleDriveItems.Count));
+            Assert.That(rst.All(f => f.StartsWith(_downloadFolder)), Is.True);
+
+            for (int i = 0; i < rst.Count; i++)
+                Assert.That(rst[i].EndsWith(_googleDriveItems[i].Title), Is.True);
         }
         #endregion
     }
