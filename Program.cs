@@ -104,7 +104,7 @@ namespace DataIngestion.TestAssignment
 		{
 			Setup();
 
-			DownloadFromGoogleDrive();
+			//DownloadFromGoogleDrive();
 			UnzipDownloadedFiles();
 			ReadUnzipFiles();
 			InsertIntoElasticSearch();

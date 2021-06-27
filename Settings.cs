@@ -23,7 +23,7 @@ namespace DataIngestion.TestAssignment
             if (!System.IO.Directory.Exists(rst))
                 System.IO.Directory.CreateDirectory(rst);
 
-            return rst;
+            return rst + "\\";
         }
         
 
@@ -46,8 +46,8 @@ namespace DataIngestion.TestAssignment
 
             GoogleDriveFolderAddress = _config["GoogleDriveFolderAddress"];
 
-            DownloadFolder = GetFolder("DownloadFolder") + "\\";
-            UnzipFolder = GetFolder("UnzipFolder") + "\\";
+            DownloadFolder = GetFolder("DownloadFolder");
+            UnzipFolder = GetFolder("UnzipFolder");
             ElasticSearchUrl = _config["ElasticSearchUrl"];
         }
     }

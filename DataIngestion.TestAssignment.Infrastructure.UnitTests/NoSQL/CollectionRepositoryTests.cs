@@ -92,8 +92,8 @@ namespace DataIngestion.TestAssignment.Infrastructure.UnitTests.NoSQL
 
             Assert.That(rst.Count, Is.GreaterThanOrEqualTo(1));
 
-            Assert.That(rst.Exists(c => c.id == _collections[0].CollectionId
-                    && c.artists.ToList().Exists(a => a.id == _artists[0].ArtistId)), 
+            Assert.That(rst.Exists(c => c.Id == _collections[0].CollectionId
+                    && c.Artists.ToList().Exists(a => a.Id == _artists[0].ArtistId)), 
                 Is.True);            
         }
     }

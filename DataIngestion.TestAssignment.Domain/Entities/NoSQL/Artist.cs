@@ -2,13 +2,13 @@
 {
     public class Artist
     {
-        public long id { get; set; }
-        public string name { get; set; }
+        public long Id { get; set; }
+        public string Name { get; set; }
 
         public Artist(long id, string name)
         {
-            this.id = id;
-            this.name = name;
+            Id = id;
+            Name = name;
         }
     }
 }
