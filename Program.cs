@@ -11,10 +11,10 @@ namespace DataIngestion.TestAssignment
 		static Domain.FileIO.IDownloader _downloader;
 		static Domain.Repositories.IUnitOfWork _unitOfWork;
 
-		static List<Domain.Entities.Artist> _artists;
-		static List<Domain.Entities.ArtistCollection> _artistCollections;
-		static List<Domain.Entities.CollectionMatch> _collectionMatches;
-		static List<Domain.Entities.Collection> _collections;
+		static IEnumerable<Domain.Entities.Artist> _artists;
+		static IEnumerable<Domain.Entities.ArtistCollection> _artistCollections;
+		static IEnumerable<Domain.Entities.CollectionMatch> _collectionMatches;
+		static IEnumerable<Domain.Entities.Collection> _collections;
         #endregion
 
         #region Methods
@@ -104,7 +104,7 @@ namespace DataIngestion.TestAssignment
 		{
 			Setup();
 
-			DownloadFromGoogleDrive();
+			//DownloadFromGoogleDrive();
 			UnzipDownloadedFiles();
 			ReadUnzipFiles();
 			InsertIntoElasticSearch();

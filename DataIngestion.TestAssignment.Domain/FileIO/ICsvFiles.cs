@@ -8,6 +8,6 @@ namespace DataIngestion.TestAssignment.Domain.FileIO
         /// Read Csv file and convert it to List
         /// </summary>
         /// <returns></returns>
-        List<TEntity> GetAll();
+        IEnumerable<TEntity> GetAll();
     }
 }

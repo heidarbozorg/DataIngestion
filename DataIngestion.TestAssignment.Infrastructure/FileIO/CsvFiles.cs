@@ -19,7 +19,7 @@ namespace DataIngestion.TestAssignment.Infrastructure.FileIO
             _fileAddress = fileAddress;
         }
 
-        public List<TEntity> GetAll()
+        public IEnumerable<TEntity> GetAll()
         {
             var fileName = Path.GetFileName(_fileAddress);
             Console.WriteLine("\r --> Read {0} file.", fileName);
