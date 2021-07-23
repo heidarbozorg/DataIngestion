@@ -1,4 +1,8 @@
 # DataIngestion.TestAssignment
+This repository is developed just as a template for how to communicate with Google Drive APIs, Elasticsearch, and implement some concepts such as DRY, SOLID Principles, and design patterns.
+
+# Senario
+Download 4 zip files from a public Google Drive folder, unzip them, read flat files, join records, and insert results in the Elasticsearch database. Each flat file contains almost 1 million records.
 
 ## Application settings
 All settings are set except Google API Key. However, you can change all the settings inside the appsettings.json.
