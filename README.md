@@ -1,4 +1,4 @@
-# DataIngestion.TestAssignment
+# DataIngestion
 This repository is developed just as a template for how to communicate with Google Drive APIs, Elasticsearch, and implement some concepts such as DRY, SOLID Principles, and design patterns.
 
 # Senario
